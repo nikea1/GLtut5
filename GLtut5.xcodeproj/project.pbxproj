@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		52663FF721A52D39006812F0 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 52663FF621A52D39006812F0 /* main.c */; };
+		52663FFF21A534BB006812F0 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 52663FFE21A534BB006812F0 /* libglfw.3.2.dylib */; };
+		5266400121A53E88006812F0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5266400021A53E87006812F0 /* OpenGL.framework */; };
+		5266400321A53FE8006812F0 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 5266400221A53FE7006812F0 /* glad.c */; };
+		5266400621A59270006812F0 /* libglmc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5266400521A59270006812F0 /* libglmc.a */; };
+		5266400B21A5984A006812F0 /* shader.c in Sources */ = {isa = PBXBuildFile; fileRef = 5266400A21A5984A006812F0 /* shader.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +30,13 @@
 /* Begin PBXFileReference section */
 		52663FF321A52D39006812F0 /* GLtut5 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GLtut5; sourceTree = BUILT_PRODUCTS_DIR; };
 		52663FF621A52D39006812F0 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		52663FFE21A534BB006812F0 /* libglfw.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.2.dylib; path = ../../../../../../usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.2.dylib; sourceTree = "<group>"; };
+		5266400021A53E87006812F0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		5266400221A53FE7006812F0 /* glad.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
+		5266400421A591F9006812F0 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		5266400521A59270006812F0 /* libglmc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglmc.a; path = ../../OpenGLStuff/glmc/libglmc.a; sourceTree = "<group>"; };
+		5266400921A597FC006812F0 /* shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = shader.h; path = ../../OpenGLStuff/shader.h; sourceTree = "<group>"; };
+		5266400A21A5984A006812F0 /* shader.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = shader.c; path = ../../OpenGLStuff/shader.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +44,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5266400621A59270006812F0 /* libglmc.a in Frameworks */,
+				5266400121A53E88006812F0 /* OpenGL.framework in Frameworks */,
+				52663FFF21A534BB006812F0 /* libglfw.3.2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,8 +56,13 @@
 		52663FEA21A52D39006812F0 = {
 			isa = PBXGroup;
 			children = (
+				5266400A21A5984A006812F0 /* shader.c */,
+				5266400221A53FE7006812F0 /* glad.c */,
+				5266400921A597FC006812F0 /* shader.h */,
+				5266400421A591F9006812F0 /* stb_image.h */,
 				52663FF521A52D39006812F0 /* GLtut5 */,
 				52663FF421A52D39006812F0 /* Products */,
+				52663FFD21A534BA006812F0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,6 +80,16 @@
 				52663FF621A52D39006812F0 /* main.c */,
 			);
 			path = GLtut5;
+			sourceTree = "<group>";
+		};
+		52663FFD21A534BA006812F0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5266400521A59270006812F0 /* libglmc.a */,
+				5266400021A53E87006812F0 /* OpenGL.framework */,
+				52663FFE21A534BB006812F0 /* libglfw.3.2.dylib */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,6 +149,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5266400B21A5984A006812F0 /* shader.c in Sources */,
+				5266400321A53FE8006812F0 /* glad.c in Sources */,
 				52663FF721A52D39006812F0 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -233,6 +265,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					../../OpenGLStuff/glmc,
+					/usr/local/Cellar/glfw/3.2.1/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -241,6 +279,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					../../OpenGLStuff/glmc,
+					/usr/local/Cellar/glfw/3.2.1/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
