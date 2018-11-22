@@ -13,17 +13,21 @@
 		5266400321A53FE8006812F0 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 5266400221A53FE7006812F0 /* glad.c */; };
 		5266400621A59270006812F0 /* libglmc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5266400521A59270006812F0 /* libglmc.a */; };
 		5266400B21A5984A006812F0 /* shader.c in Sources */ = {isa = PBXBuildFile; fileRef = 5266400A21A5984A006812F0 /* shader.c */; };
+		5286489B21A655FD007E4114 /* fshader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5266400D21A61DCE006812F0 /* fshader.frag */; };
+		5286489C21A65602007E4114 /* vshader.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5266400C21A61DAE006812F0 /* vshader.vert */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		52663FF121A52D39006812F0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
+				5286489C21A65602007E4114 /* vshader.vert in CopyFiles */,
+				5286489B21A655FD007E4114 /* fshader.frag in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -37,6 +41,8 @@
 		5266400521A59270006812F0 /* libglmc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglmc.a; path = ../../OpenGLStuff/glmc/libglmc.a; sourceTree = "<group>"; };
 		5266400921A597FC006812F0 /* shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = shader.h; path = ../../OpenGLStuff/shader.h; sourceTree = "<group>"; };
 		5266400A21A5984A006812F0 /* shader.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = shader.c; path = ../../OpenGLStuff/shader.c; sourceTree = "<group>"; };
+		5266400C21A61DAE006812F0 /* vshader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = vshader.vert; sourceTree = "<group>"; };
+		5266400D21A61DCE006812F0 /* fshader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = fshader.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +62,10 @@
 		52663FEA21A52D39006812F0 = {
 			isa = PBXGroup;
 			children = (
+				5266400D21A61DCE006812F0 /* fshader.frag */,
 				5266400A21A5984A006812F0 /* shader.c */,
 				5266400221A53FE7006812F0 /* glad.c */,
+				5266400C21A61DAE006812F0 /* vshader.vert */,
 				5266400921A597FC006812F0 /* shader.h */,
 				5266400421A591F9006812F0 /* stb_image.h */,
 				52663FF521A52D39006812F0 /* GLtut5 */,
