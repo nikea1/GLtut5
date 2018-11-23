@@ -70,11 +70,11 @@ int main(int argc, const char * argv[]) {
     GLuint ebo; //Element Buffer Object
     
     GLfloat vertices[] = {
-        //Position
-        0.5f,  0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-       -0.5f, -0.5f, 0.0f,
-       -0.5f,  0.5f, 0.0f
+        //Position         //Color
+        0.5f,  0.5f, 0.0f, 1.0f, 0.5f, 0.25f,
+        0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.25f,
+       -0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.25f,
+       -0.5f,  0.5f, 0.0f, 1.0f, 0.5f, 0.25f,
     };
     
     GLuint elements[]={
@@ -105,9 +105,12 @@ int main(int argc, const char * argv[]) {
     //Set Attributes
     //------------------------------------------------------
     //Position attributes in layout/index 0
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0*sizeof(GL_FLOAT), (GLvoid*)0);   //define position attribute data
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GL_FLOAT), (GLvoid*)0);   //define position attribute data
     glEnableVertexAttribArray(0);                                                      //Activate layout 0
     
+    //Color attribure in layout/index 1
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GL_FLOAT), (GLvoid*)(3*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(1);
     //------------------------------------------------------
     //Loop Starts Here
     //------------------------------------------------------
