@@ -25,11 +25,11 @@
 
 
 int main(int argc, const char * argv[]) {
-    GLFWwindow *window;
-    
     //-----------------------------------------------------
     //Initialize GLFW and GLAD
     //-----------------------------------------------------
+    
+    GLFWwindow *window;
     
     //Initialize GLFW window
     if(!glfwInit()){
@@ -69,12 +69,16 @@ int main(int argc, const char * argv[]) {
     GLuint vbo; //Vertex Buffer Object
     GLuint ebo; //Element Buffer Object
     
+    GLuint tex0, tex1; //Textures
+    unsigned char *img; //image data
+    int width, height, nrchannel; //image details
+    
     GLfloat vertices[] = {
-        //Position         //Color
-        0.5f,  0.5f, 0.0f, 1.0f, 0.5f, 0.25f,
-        0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.25f,
-       -0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.25f,
-       -0.5f,  0.5f, 0.0f, 1.0f, 0.5f, 0.25f,
+        //Position         //Color            //Textures
+        0.5f,  0.5f, 0.0f, 1.0f, 0.5f, 0.25f, 1.0f, 1.0f, //0
+        0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.25f, 1.0f, 0.0f, //1
+       -0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.25f, 0.0f, 0.0f, //2
+       -0.5f,  0.5f, 0.0f, 1.0f, 0.5f, 0.25f, 0.0f, 1.0f, //3
     };
     
     GLuint elements[]={
@@ -82,6 +86,30 @@ int main(int argc, const char * argv[]) {
       0, 2, 3
     };
     glUseProgram(program);
+    
+    //------------------------------------------------------
+    //Textures
+    //------------------------------------------------------
+    
+    glGenTextures(1, &tex0);                                                                        //Generate Texture
+    glBindBuffer(GL_TEXTURE_2D, tex0);                                                              //Bind current Texture
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);                                   //Set S parameter to Repeat
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);                                   //Set T parameter to Repeat
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);                               //Set Minification filter to Linear
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);                               //Set Magnification filter to linear
+    
+    img = stbi_load("container.jpg", &width, &height, &nrchannel, 0);                               //Load image data into array
+    
+    if(img){
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, img);    //Load image into the texture
+        glGenerateMipmap(GL_TEXTURE_2D);                                                            //Generate mipmaps of current texture
+        stbi_image_free(img);                                                                       //Free image after use
+    }
+    else{
+        printf("Image did not load.\n");
+        exit(EXIT_FAILURE);
+    }
     
     //------------------------------------------------------
     //Buffers
@@ -105,12 +133,17 @@ int main(int argc, const char * argv[]) {
     //Set Attributes
     //------------------------------------------------------
     //Position attributes in layout/index 0
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GL_FLOAT), (GLvoid*)0);   //define position attribute data
-    glEnableVertexAttribArray(0);                                                      //Activate layout 0
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GL_FLOAT), (GLvoid*)0);                    //define position attribute data
+    glEnableVertexAttribArray(0);                                                                       //Activate layout 0
     
-    //Color attribure in layout/index 1
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GL_FLOAT), (GLvoid*)(3*sizeof(GL_FLOAT)));
-    glEnableVertexAttribArray(1);
+    //Color attributes in layout/index 1
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GL_FLOAT), (GLvoid*)(3*sizeof(GL_FLOAT))); //defined the Color attribute
+    glEnableVertexAttribArray(1);                                                                       //Activate layout 1
+    
+    //Texture attributes in layout/index 2
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8*sizeof(GL_FLOAT), (GLvoid*)(6*sizeof(GL_FLOAT))); //defined the Texture attribute
+    glEnableVertexAttribArray(2);                                                                       //Activate layout 2
+    
     //------------------------------------------------------
     //Loop Starts Here
     //------------------------------------------------------

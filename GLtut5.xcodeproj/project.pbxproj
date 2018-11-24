@@ -15,6 +15,8 @@
 		5266400B21A5984A006812F0 /* shader.c in Sources */ = {isa = PBXBuildFile; fileRef = 5266400A21A5984A006812F0 /* shader.c */; };
 		5286489B21A655FD007E4114 /* fshader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5266400D21A61DCE006812F0 /* fshader.frag */; };
 		5286489C21A65602007E4114 /* vshader.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5266400C21A61DAE006812F0 /* vshader.vert */; };
+		5286489E21A892EE007E4114 /* awesomeface.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5286489D21A892EE007E4114 /* awesomeface.png */; };
+		528648A021A89303007E4114 /* container.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5286489F21A89303007E4114 /* container.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,6 +26,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				528648A021A89303007E4114 /* container.jpg in CopyFiles */,
+				5286489E21A892EE007E4114 /* awesomeface.png in CopyFiles */,
 				5286489C21A65602007E4114 /* vshader.vert in CopyFiles */,
 				5286489B21A655FD007E4114 /* fshader.frag in CopyFiles */,
 			);
@@ -43,6 +47,8 @@
 		5266400A21A5984A006812F0 /* shader.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = shader.c; path = ../../OpenGLStuff/shader.c; sourceTree = "<group>"; };
 		5266400C21A61DAE006812F0 /* vshader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = vshader.vert; sourceTree = "<group>"; };
 		5266400D21A61DCE006812F0 /* fshader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = fshader.frag; sourceTree = "<group>"; };
+		5286489D21A892EE007E4114 /* awesomeface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = awesomeface.png; sourceTree = "<group>"; };
+		5286489F21A89303007E4114 /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +68,8 @@
 		52663FEA21A52D39006812F0 = {
 			isa = PBXGroup;
 			children = (
+				5286489F21A89303007E4114 /* container.jpg */,
+				5286489D21A892EE007E4114 /* awesomeface.png */,
 				5266400D21A61DCE006812F0 /* fshader.frag */,
 				5266400A21A5984A006812F0 /* shader.c */,
 				5266400221A53FE7006812F0 /* glad.c */,
