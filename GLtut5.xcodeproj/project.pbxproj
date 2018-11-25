@@ -17,6 +17,8 @@
 		5286489C21A65602007E4114 /* vshader.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5266400C21A61DAE006812F0 /* vshader.vert */; };
 		5286489E21A892EE007E4114 /* awesomeface.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5286489D21A892EE007E4114 /* awesomeface.png */; };
 		528648A021A89303007E4114 /* container.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5286489F21A89303007E4114 /* container.jpg */; };
+		528648A321AA832F007E4114 /* cubefshader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 528648A221AA7BC0007E4114 /* cubefshader.frag */; };
+		528648A421AA8335007E4114 /* cubevshader.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 528648A121AA7BA8007E4114 /* cubevshader.vert */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +28,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				528648A421AA8335007E4114 /* cubevshader.vert in CopyFiles */,
+				528648A321AA832F007E4114 /* cubefshader.frag in CopyFiles */,
 				528648A021A89303007E4114 /* container.jpg in CopyFiles */,
 				5286489E21A892EE007E4114 /* awesomeface.png in CopyFiles */,
 				5286489C21A65602007E4114 /* vshader.vert in CopyFiles */,
@@ -49,6 +53,8 @@
 		5266400D21A61DCE006812F0 /* fshader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = fshader.frag; sourceTree = "<group>"; };
 		5286489D21A892EE007E4114 /* awesomeface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = awesomeface.png; sourceTree = "<group>"; };
 		5286489F21A89303007E4114 /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
+		528648A121AA7BA8007E4114 /* cubevshader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = cubevshader.vert; sourceTree = "<group>"; };
+		528648A221AA7BC0007E4114 /* cubefshader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = cubefshader.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +74,8 @@
 		52663FEA21A52D39006812F0 = {
 			isa = PBXGroup;
 			children = (
+				528648A221AA7BC0007E4114 /* cubefshader.frag */,
+				528648A121AA7BA8007E4114 /* cubevshader.vert */,
 				5286489F21A89303007E4114 /* container.jpg */,
 				5286489D21A892EE007E4114 /* awesomeface.png */,
 				5266400D21A61DCE006812F0 /* fshader.frag */,

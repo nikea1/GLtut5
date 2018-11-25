@@ -68,8 +68,8 @@ int main(int argc, const char * argv[]) {
     //OpenGL Code Starts Here
     //------------------------------------------------------
     
-    GLuint program = initShaderFiles("vshader.vert", "fshader.frag");   //Initialize shaders
-    
+    //GLuint program = initShaderFiles("vshader.vert", "fshader.frag");   //Initialize shaders
+    GLuint c_program = initShaderFiles("cubevshader.vert", "cubefshader.frag"); //Init shader for cube
     GLuint vao; //Vertex Array Object
     GLuint vbo; //Vertex Buffer Object
     GLuint ebo; //Element Buffer Object
@@ -79,6 +79,7 @@ int main(int argc, const char * argv[]) {
     int width, height, nrchannel; //image details
     
     //Local Coordinates
+    /*
     GLfloat vertices[] = {
         //Position         //Color            //Textures
         0.5f,  0.5f, 0.0f, 1.0f, 0.5f, 0.25f, 1.0f, 1.0f, //0
@@ -91,7 +92,51 @@ int main(int argc, const char * argv[]) {
       0, 1, 2,
       0, 2, 3
     };
-    
+    */
+    GLfloat c_vertices[] = {
+        //Position            //Textures
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+      
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
     //Matrices and vectors
     GLfloat m4_out[16]; //output to shaders
     t_mat4 temp;
@@ -101,27 +146,27 @@ int main(int argc, const char * argv[]) {
     t_mat4 model;
     t_mat4 view;
     t_mat4 projection;
-    glUseProgram(program);
+    //glUseProgram(program);
+    glUseProgram(c_program);
     
     //------------------------------------------------------
     //MVP Matrix
     //------------------------------------------------------
     glmc_identity(model);                                       //initialize model matrix as identity matrix
-    glmc_vec3(1.0, 0.0, 0.0, axis);                             //set axis
-    glmc_rotate(model, toRadians(-55.0), axis, temp);           //rotate model -55 degrees around x axis and save to temp
+    glmc_vec3(0.5, 1.0, 0.0, axis);                             //set axis
+   /* glmc_rotate(model, toRadians(50.0), axis, temp);          //rotate model -55 degrees around x axis and save to temp
     mat4Copy(temp, model);                                      //copy temp into model
+    */
+    glmc_identity(view);/*                                      //Initialize view
+    glmc_vec3(0.0, 0.0, -3.0, trans);                           //Set Translation vector
+    glmc_translate(view, trans, temp);                          //Translate view matrix and save in temp
+    mat4Copy(temp, view);*/                                     //copy temp in view
     
-    glmc_identity(view);
-    glmc_vec3(0.0, 0.0, -3.0, trans);
-    glmc_translate(view, trans, temp);
-    mat4Copy(temp, view);/**/
     
-    
-    glmc_identity(projection);
-    glmc_vec4(toRadians(45.0), (double)400/(double)400, 0.1, 100.0, frustrum);
-    test(frustrum, projection);/*
-    mat4Transpose(projection, temp);
-    mat4Copy(temp, projection);*/
+    glmc_identity(projection);/*                                //Initialize projection
+    glmc_vec4(toRadians(45.0), (double)400/(double)400, 0.1, 100.0, frustrum); //Set Frustrum
+    test(frustrum, projection);                                 //Test my own Perspective matrix
+    */
     
     //------------------------------------------------------
     //Textures
@@ -175,10 +220,16 @@ int main(int argc, const char * argv[]) {
     //------------------------------------------------------
     //Buffers
     //------------------------------------------------------
+   
     //Vertex Array
     glGenVertexArrays(1, &vao);                                                        //Generate Vertex Array that will hold the array buffers
     glBindVertexArray(vao);                                                            //Bind Vertex Array
     
+    //Array Cube buffer
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(c_vertices), c_vertices, GL_STATIC_DRAW);
+    /*
     //Array Buffer
     glGenBuffers(1, &vbo);                                                             //gernerate array buffer
     glBindBuffer(GL_ARRAY_BUFFER, vbo);                                                //bind Array buffer
@@ -188,11 +239,18 @@ int main(int argc, const char * argv[]) {
     glGenBuffers(1, &ebo);                                                             //generate element buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);                                        //bind element array buffer
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW); //set data in element array buffer to draw
-    
+    */
     
     //------------------------------------------------------
     //Set Attributes
     //------------------------------------------------------
+    //Cube attributes
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GL_FLOAT), (GLvoid*)0);
+    glEnableVertexAttribArray(0);
+    //Cube Textures
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GL_FLOAT), (GLvoid*)(3*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(1);
+    /*
     //Position attributes in layout/index 0
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GL_FLOAT), (GLvoid*)0);                    //define position attribute data
     glEnableVertexAttribArray(0);                                                                       //Activate layout 0
@@ -204,15 +262,16 @@ int main(int argc, const char * argv[]) {
     //Texture attributes in layout/index 2
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8*sizeof(GL_FLOAT), (GLvoid*)(6*sizeof(GL_FLOAT))); //defined the Texture attribute
     glEnableVertexAttribArray(2);                                                                       //Activate layout 2
-    
+    */
     //------------------------------------------------------
     //Set Uniforms
     //------------------------------------------------------
     
     //Uniform Textures
-    glUniform1i(glGetUniformLocation(program, "texture0"), 0);                          //Get location of texture0 in program and set it to 0
-    glUniform1i(glGetUniformLocation(program, "texture1"), 1);                          //Get location of texture1 in program and set it to 1
+    glUniform1i(glGetUniformLocation(c_program, "texture0"), 0);                          //Get location of texture0 in program and set it to 0
+    glUniform1i(glGetUniformLocation(c_program, "texture1"), 1);                          //Get location of texture1 in program and set it to 1
     
+    glEnable(GL_DEPTH_TEST);
     //------------------------------------------------------
     //Loop Starts Here
     //------------------------------------------------------
@@ -220,7 +279,7 @@ int main(int argc, const char * argv[]) {
         
         //Clear Window screen
         glClearColor(1.0, 1.0, 1.0, 1.0);                                               //Set a clear color to white
-        glClear(GL_COLOR_BUFFER_BIT);                                                   //Clear color with the clear color
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);                             //Clear color with the clear color
         
         //Textures
         glActiveTexture(GL_TEXTURE0);                                                   //Activate textures in Texture 0
@@ -229,16 +288,20 @@ int main(int argc, const char * argv[]) {
         glBindTexture(GL_TEXTURE_2D, tex1);                                             //Bind tex1
         
         //mvp matrix
-        mat4DoubleToFloat(model, m4_out);
-        glUniformMatrix4fv(glGetUniformLocation(program, "model"), 1, GL_FALSE, m4_out);
-        mat4DoubleToFloat(view, m4_out);
-        glUniformMatrix4fv(glGetUniformLocation(program, "view"), 1, GL_FALSE, m4_out);
+        glmc_identity(model);                                                           //Reset model matrix each loop
+        glmc_rotate(model, glfwGetTime()*toRadians(50.0), axis, temp);                  //set new rotation for model
+        mat4Copy(temp, model);                                                          //copy temp to model
+        mat4DoubleToFloat(model, m4_out);                                               //convert double type to float
+        glUniformMatrix4fv(glGetUniformLocation(c_program, "model"), 1, GL_FALSE, m4_out); //set uniform matrix model
+        mat4DoubleToFloat(view, m4_out);                                                //convert view to float matrix
+        glUniformMatrix4fv(glGetUniformLocation(c_program, "view"), 1, GL_FALSE, m4_out); //set uniform view matrix
         
-        mat4DoubleToFloat(projection, m4_out);
-        glUniformMatrix4fv(glGetUniformLocation(program, "projection"), 1, GL_FALSE, m4_out);
+        mat4DoubleToFloat(projection, m4_out);                                          //convert Projection to float
+        glUniformMatrix4fv(glGetUniformLocation(c_program, "projection"), 1, GL_FALSE, m4_out); //set uniform projection matrix
         
         //Draw
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);                           //Reads Element Buffer and draws
+        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);                           //Reads Element Buffer and draws
+        glDrawArrays(GL_TRIANGLES, 0, 36);
         
         //swap frames and IO
         glfwSwapBuffers(window);                                                       //swap frames
@@ -306,7 +369,7 @@ void zeroMat4(t_mat4 in){
     }
 }
 
-void            test(t_vec4 frustum, t_mat4 dest)
+void test(t_vec4 frustum, t_mat4 dest)
 {
     /*
     t_vec4        clip;
