@@ -49,7 +49,7 @@ int main(int argc, const char * argv[]) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
     //create GLFW window
-    window = glfwCreateWindow(400, 400, "Model View", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "Model View", NULL, NULL);
     
     //check is GLFW window has been created.
     if(!window){
@@ -137,6 +137,20 @@ int main(int argc, const char * argv[]) {
         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
+    
+    t_vec3 cube_Positions[] = {
+        {0.0f, 0.0f,   0.0f},
+        {2.0f, 5.0f, -15.0f},
+        {-1.5f, -2.2f, -2.5f},
+        {-3.8f, -2.0f, -12.3f},
+        { 2.4f, -0.4f, -3.5f},
+        {-1.7f,  3.0f, -7.5f},
+        { 1.3f, -2.0f, -2.5f},
+        { 1.5f,  2.0f, -2.5f},
+        { 1.5f,  0.2f, -1.5f},
+        {-1.3f,  1.0f, -1.5f},
+        
+    };
     //Matrices and vectors
     GLfloat m4_out[16]; //output to shaders
     t_mat4 temp;
@@ -157,16 +171,16 @@ int main(int argc, const char * argv[]) {
    /* glmc_rotate(model, toRadians(50.0), axis, temp);          //rotate model -55 degrees around x axis and save to temp
     mat4Copy(temp, model);                                      //copy temp into model
     */
-    glmc_identity(view);/*                                      //Initialize view
+    glmc_identity(view);                                    //Initialize view
     glmc_vec3(0.0, 0.0, -3.0, trans);                           //Set Translation vector
     glmc_translate(view, trans, temp);                          //Translate view matrix and save in temp
-    mat4Copy(temp, view);*/                                     //copy temp in view
+    mat4Copy(temp, view);/*  */                                     //copy temp in view
     
     
-    glmc_identity(projection);/*                                //Initialize projection
-    glmc_vec4(toRadians(45.0), (double)400/(double)400, 0.1, 100.0, frustrum); //Set Frustrum
+    glmc_identity(projection);                                //Initialize projection
+    glmc_vec4(toRadians(45.0), (double)800/(double)600, 0.1, 100.0, frustrum); //Set Frustrum
     test(frustrum, projection);                                 //Test my own Perspective matrix
-    */
+   /* */
     
     //------------------------------------------------------
     //Textures
@@ -288,21 +302,26 @@ int main(int argc, const char * argv[]) {
         glBindTexture(GL_TEXTURE_2D, tex1);                                             //Bind tex1
         
         //mvp matrix
-        glmc_identity(model);                                                           //Reset model matrix each loop
-        glmc_rotate(model, glfwGetTime()*toRadians(50.0), axis, temp);                  //set new rotation for model
-        mat4Copy(temp, model);                                                          //copy temp to model
-        mat4DoubleToFloat(model, m4_out);                                               //convert double type to float
-        glUniformMatrix4fv(glGetUniformLocation(c_program, "model"), 1, GL_FALSE, m4_out); //set uniform matrix model
-        mat4DoubleToFloat(view, m4_out);                                                //convert view to float matrix
-        glUniformMatrix4fv(glGetUniformLocation(c_program, "view"), 1, GL_FALSE, m4_out); //set uniform view matrix
+        for(int i = 0; i < 10; i++){
+            glmc_identity(model);
+            glmc_translate(model, cube_Positions[i], temp);
+            glmc_vec3(1.0, 0.3, 0.5, axis);
+            double angle = 20.0 * i;
+            glmc_rotate(temp, angle, axis, model);
+            //glmc_rotate(model, -glfwGetTime()*toRadians(50.0), axis, temp);                  //set new rotation for model
+            //mat4Copy(temp, model);                                                          //copy temp to model
+            mat4DoubleToFloat(model, m4_out);                                               //convert double type to float
+            glUniformMatrix4fv(glGetUniformLocation(c_program, "model"), 1, GL_FALSE, m4_out); //set uniform matrix model
+            mat4DoubleToFloat(view, m4_out);                                                //convert view to float matrix
+            glUniformMatrix4fv(glGetUniformLocation(c_program, "view"), 1, GL_FALSE, m4_out); //set uniform view matrix
         
-        mat4DoubleToFloat(projection, m4_out);                                          //convert Projection to float
-        glUniformMatrix4fv(glGetUniformLocation(c_program, "projection"), 1, GL_FALSE, m4_out); //set uniform projection matrix
+            mat4DoubleToFloat(projection, m4_out);                                          //convert Projection to float
+            glUniformMatrix4fv(glGetUniformLocation(c_program, "projection"), 1, GL_FALSE, m4_out); //set uniform projection matrix
         
-        //Draw
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);                           //Reads Element Buffer and draws
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        
+            //Draw
+            //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);                           //Reads Element Buffer and draws
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
         //swap frames and IO
         glfwSwapBuffers(window);                                                       //swap frames
         glfwPollEvents();                                                              //Check for IO
