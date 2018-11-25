@@ -306,10 +306,14 @@ int main(int argc, const char * argv[]) {
             glmc_identity(model);
             glmc_translate(model, cube_Positions[i], temp);
             glmc_vec3(1.0, 0.3, 0.5, axis);
-            double angle = 20.0 * i;
-            glmc_rotate(temp, angle, axis, model);
-            //glmc_rotate(model, -glfwGetTime()*toRadians(50.0), axis, temp);                  //set new rotation for model
-            //mat4Copy(temp, model);                                                          //copy temp to model
+            double angle;
+            if(i%3 == 0){
+                angle = 25.0 * glfwGetTime();
+            }
+            else{
+                angle = 20.0 * i;
+            }
+            glmc_rotate(temp, toRadians(angle), axis, model);                                                    //copy temp to model
             mat4DoubleToFloat(model, m4_out);                                               //convert double type to float
             glUniformMatrix4fv(glGetUniformLocation(c_program, "model"), 1, GL_FALSE, m4_out); //set uniform matrix model
             mat4DoubleToFloat(view, m4_out);                                                //convert view to float matrix
