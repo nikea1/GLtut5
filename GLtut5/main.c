@@ -21,8 +21,12 @@
 #include <stdlib.h>
 #include <math.h>
 
-
-
+void mat4DoubleToFloat(t_mat4 in, float* out);
+void mat4Copy(t_mat4 in, t_mat4 out);
+double toRadians(double degrees);
+void mat4Transpose(t_mat4, t_mat4);
+void test(t_vec4, t_mat4);
+void zeroMat4(t_mat4 in);
 
 int main(int argc, const char * argv[]) {
     //-----------------------------------------------------
@@ -64,7 +68,8 @@ int main(int argc, const char * argv[]) {
     //OpenGL Code Starts Here
     //------------------------------------------------------
     
-    GLuint program = initShaderFiles("vshader.vert", "fshader.frag");
+    GLuint program = initShaderFiles("vshader.vert", "fshader.frag");   //Initialize shaders
+    
     GLuint vao; //Vertex Array Object
     GLuint vbo; //Vertex Buffer Object
     GLuint ebo; //Element Buffer Object
@@ -73,6 +78,7 @@ int main(int argc, const char * argv[]) {
     unsigned char *img; //image data
     int width, height, nrchannel; //image details
     
+    //Local Coordinates
     GLfloat vertices[] = {
         //Position         //Color            //Textures
         0.5f,  0.5f, 0.0f, 1.0f, 0.5f, 0.25f, 1.0f, 1.0f, //0
@@ -85,14 +91,45 @@ int main(int argc, const char * argv[]) {
       0, 1, 2,
       0, 2, 3
     };
+    
+    //Matrices and vectors
+    GLfloat m4_out[16]; //output to shaders
+    t_mat4 temp;
+    t_vec3 axis;
+    t_vec3 trans;
+    t_vec4 frustrum; //FOV, Ascpect, Near, Far
+    t_mat4 model;
+    t_mat4 view;
+    t_mat4 projection;
     glUseProgram(program);
+    
+    //------------------------------------------------------
+    //MVP Matrix
+    //------------------------------------------------------
+    glmc_identity(model);                                       //initialize model matrix as identity matrix
+    glmc_vec3(1.0, 0.0, 0.0, axis);                             //set axis
+    glmc_rotate(model, toRadians(-55.0), axis, temp);           //rotate model -55 degrees around x axis and save to temp
+    mat4Copy(temp, model);                                      //copy temp into model
+    
+    glmc_identity(view);
+    glmc_vec3(0.0, 0.0, -3.0, trans);
+    glmc_translate(view, trans, temp);
+    mat4Copy(temp, view);/**/
+    
+    
+    glmc_identity(projection);
+    glmc_vec4(toRadians(45.0), (double)400/(double)400, 0.1, 100.0, frustrum);
+    test(frustrum, projection);/*
+    mat4Transpose(projection, temp);
+    mat4Copy(temp, projection);*/
     
     //------------------------------------------------------
     //Textures
     //------------------------------------------------------
     
+    //Container
     glGenTextures(1, &tex0);                                                                        //Generate Texture
-    glBindBuffer(GL_TEXTURE_2D, tex0);                                                              //Bind current Texture
+    glBindTexture(GL_TEXTURE_2D, tex0);                                                             //Bind current Texture
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);                                   //Set S parameter to Repeat
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);                                   //Set T parameter to Repeat
@@ -105,6 +142,30 @@ int main(int argc, const char * argv[]) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, img);    //Load image into the texture
         glGenerateMipmap(GL_TEXTURE_2D);                                                            //Generate mipmaps of current texture
         stbi_image_free(img);                                                                       //Free image after use
+    }
+    else{
+        printf("Image did not load.\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    //Awesome Face
+    glActiveTexture(GL_TEXTURE1);                                                                   //Turn on Texture 1
+    glGenTextures(1, &tex1);                                                                        //Generate Texture
+    glBindTexture(GL_TEXTURE_2D, tex1);                                                             //Bind texture as Current texture
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);                                   //Set S parameter
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);                                   //Set T parameter
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);                               //Set Minification
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);                               //Set Magnification
+    
+    stbi_set_flip_vertically_on_load(1);                                                            //Flip image vertically
+    img = stbi_load("awesomeface.png", &width, &height, &nrchannel, 0);                             //Load image data into array
+    
+    
+    if(img){
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);   //Load image into texture
+        glGenerateMipmap(GL_TEXTURE_2D);                                                            //Generate mipmap of current texture
+        stbi_image_free(img);                                                                       //free the image
     }
     else{
         printf("Image did not load.\n");
@@ -145,13 +206,36 @@ int main(int argc, const char * argv[]) {
     glEnableVertexAttribArray(2);                                                                       //Activate layout 2
     
     //------------------------------------------------------
+    //Set Uniforms
+    //------------------------------------------------------
+    
+    //Uniform Textures
+    glUniform1i(glGetUniformLocation(program, "texture0"), 0);                          //Get location of texture0 in program and set it to 0
+    glUniform1i(glGetUniformLocation(program, "texture1"), 1);                          //Get location of texture1 in program and set it to 1
+    
+    //------------------------------------------------------
     //Loop Starts Here
     //------------------------------------------------------
     while(!glfwWindowShouldClose(window)){
         
         //Clear Window screen
-        glClearColor(1.0, 1.0, 1.0, 1.0);                                              //Set a clear color to white
-        glClear(GL_COLOR_BUFFER_BIT);                                                  //Clear color with the clear color
+        glClearColor(1.0, 1.0, 1.0, 1.0);                                               //Set a clear color to white
+        glClear(GL_COLOR_BUFFER_BIT);                                                   //Clear color with the clear color
+        
+        //Textures
+        glActiveTexture(GL_TEXTURE0);                                                   //Activate textures in Texture 0
+        glBindTexture(GL_TEXTURE_2D, tex0);                                             //Bind tex0
+        glActiveTexture(GL_TEXTURE1);                                                   //Activate textures in Texture 1
+        glBindTexture(GL_TEXTURE_2D, tex1);                                             //Bind tex1
+        
+        //mvp matrix
+        mat4DoubleToFloat(model, m4_out);
+        glUniformMatrix4fv(glGetUniformLocation(program, "model"), 1, GL_FALSE, m4_out);
+        mat4DoubleToFloat(view, m4_out);
+        glUniformMatrix4fv(glGetUniformLocation(program, "view"), 1, GL_FALSE, m4_out);
+        
+        mat4DoubleToFloat(projection, m4_out);
+        glUniformMatrix4fv(glGetUniformLocation(program, "projection"), 1, GL_FALSE, m4_out);
         
         //Draw
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);                           //Reads Element Buffer and draws
@@ -167,4 +251,107 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
+void mat4DoubleToFloat(t_mat4 in, float* out){
+    if(in == NULL || out == NULL)
+    return;
+    
+    for(int i = 0; i< 16; i++){
+        out[i] = (float)in[i];
+    }
+}
 
+void mat4Copy(t_mat4 in, t_mat4 out){
+    
+    for(int i = 0; i< 16; i++){
+        out[i] = (float)in[i];
+    }
+}
+
+double toRadians(double degrees){
+    return degrees*M_PI/180.0;
+}
+
+void mat4Transpose(t_mat4 in, t_mat4 out){
+
+    // 0  1  2  3   -> 0  4  8 12
+    // 4  5  6  7      1  5  9 13
+    // 8  9 10 11      2  6 10 14
+    //12 13 14 15      3  7 11 15
+    
+    out[0] = in[0];
+    out[1] = in[4];
+    out[2] = in[8];
+    out[3] = in[12];
+    
+    out[4] = in[1];
+    out[5] = in[5];
+    out[6] = in[9];
+    out[7] = in[13];
+    
+    out[8] = in[2];
+    out[9] = in[6];
+    out[10] = in[10];
+    out[11] = in[14];
+    
+    out[12] = in[3];
+    out[13] = in[7];
+    out[14] = in[11];
+    out[15] = in[15];
+    
+}
+
+void zeroMat4(t_mat4 in){
+    for(int i = 0; i < 16; i++){
+        in[i] = 0.0;
+    }
+}
+
+void            test(t_vec4 frustum, t_mat4 dest)
+{
+    /*
+    t_vec4        clip;
+    double        rl;
+    double        tb;
+    double        fn;
+    
+    clip[TOP] = frustum[NEAR] * tan(frustum[FOV] * M_PI / 360.0);
+    clip[RIGHT] = clip[TOP] * frustum[ASPECT];
+    clip[LEFT] = -clip[RIGHT];
+    clip[BOTTOM] = -clip[TOP];
+    rl = clip[RIGHT] - clip[LEFT];
+    tb = clip[TOP] - clip[BOTTOM];
+    fn = frustum[FAR] - frustum[NEAR];
+    dest[0] = (frustum[NEAR] * 2.0) / rl;
+    dest[1] = 0.0;
+    dest[2] = 0.0;
+    dest[3] = 0.0;
+    dest[4] = 0.0;
+    dest[5] = (frustum[NEAR] * 2.0) / tb;
+    dest[6] = 0.0;
+    dest[7] = 0.0;
+    dest[8] = (clip[RIGHT] + clip[LEFT]) / rl;
+    dest[9] = (clip[TOP] + clip[BOTTOM]) / tb;
+    dest[10] = -(frustum[FAR] + frustum[NEAR]) / fn;
+    dest[11] = -1.0;
+    dest[12] = 0.0;
+    dest[13] = 0.0;
+    dest[14] = -(frustum[FAR] * frustum[NEAR] * 2.0) / fn;
+    dest[15] = 0.0;
+    */
+    
+    // 0  1  2  3
+    // 4  5  6  7
+    // 8  9 10 11
+    //12 13 14 15
+    double f, fn;
+    zeroMat4(dest);
+    f = 1/tan(frustum[FOV]*0.5);
+    fn = 1 / (frustum[NEAR]-frustum[FAR]);
+    
+    dest[0] = f / frustum[ASPECT];
+    dest[5] = f;
+    dest[10] = (frustum[NEAR] + frustum[FAR]) * fn;
+    dest[11] = -1.0;
+    dest[14] = 2.0 * fn * frustum[NEAR] * frustum[FAR];
+    
+}
